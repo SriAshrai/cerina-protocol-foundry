@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Direct API Test (bypassing React)</h2>
+  <button onclick="testBackend()">Test Backend</button>
+  <div id="result"></div>
+  
+  <script>
+    async function testBackend() {
+      const result = document.getElementById('result');
+      result.innerHTML = 'Testing...';
+      
+      try {
+        // Test 1: Health endpoint
+        const health = await fetch('http://localhost:8000/health');
+        const healthData = await health.json();
+        
+        // Test 2: Invoke endpoint
+        const invoke = await fetch('http://localhost:8000/invoke', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({intent: 'Test from browser'})
+        });
+        const invokeData = await invoke.json();
+        
+        result.innerHTML = `
+          <h3>✅ Backend Working!</h3>
+          <p>Health: ${JSON.stringify(healthData)}</p>
+          <p>Invoke Response: ${JSON.stringify(invokeData)}</p>
+        `;
+      } catch (error) {
+        result.innerHTML = `
+          <h3>❌ Backend Failed</h3>
+          <p>Error: ${error.message}</p>
+          <p>Check: 
+            <ul>
+              <li>Is backend running? (http://localhost:8000)</li>
+              <li>CORS enabled? (should allow localhost:3000)</li>
+              <li>Any firewall blocking?</li>
+            </ul>
+          </p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

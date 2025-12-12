@@ -1,0 +1,13 @@
+# backend/requirements.txt
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+langchain>=0.1.0
+langgraph>=0.0.29
+langchain-openai>=0.0.8
+langgraph-checkpoint-sqlite>=0.0.6
+pydantic>=2.5.0
+python-dotenv>=1.0.0
+sse-starlette==1.6.5
+httpx==0.25.2
+aiofiles==23.2.1
+sqlite3  # For async file operations
