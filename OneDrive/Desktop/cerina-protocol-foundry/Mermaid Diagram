@@ -1,0 +1,56 @@
+%%{init: {"flowchart": {"htmlLabels": true}} }%%
+graph TD
+
+    %% =========================
+    %% INITIAL STATE
+    %% =========================
+    S0["GraphState Initializeddraft = nulldraft_history = []reviews = []scores = {}iteration_count = 0human_approved = falseerror = null"]
+
+    %% =========================
+    %% AGENT NODES
+    %% =========================
+    A["drafter- sets draft- appends draft_history- sets last_drafted- measures drafting_time"]
+
+    B["reviewer- appends reviews- sets scores- sets last_reviewed"]
+
+    C["supervisor_synthesis- sets supervisor_feedback- measures synthesis_time"]
+
+    D{"supervisor_routerreads scoresreads iteration_countreads human_approvedreads error"}
+
+    E["human_review_haltexternal approvalresume via API"]
+
+    F((END))
+
+    %% =========================
+    %% FLOW
+    %% =========================
+    S0 --> A
+    A --> B
+    B --> C
+    C --> D
+
+    %% =========================
+    %% ROUTER CONDITIONS
+    %% =========================
+    D -->|Error present| E
+    D -->|Human approved| F
+    D -->|High scores| E
+    D -->|Max iterations or unsafe| E
+    D -->|Needs revision| A
+    D -->|Borderline case| E
+
+    %% =========================
+    %% HUMAN LOOP
+    %% =========================
+    E -->|Approved true| C
+
+    %% =========================
+    %% STYLING
+    %% =========================
+    style S0 fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style A fill:#f1f8e9,stroke:#558b2f
+    style B fill:#ede7f6,stroke:#5e35b1
+    style C fill:#e8f5e9,stroke:#2e7d32
+    style D fill:#fff3e0,stroke:#ef6c00
+    style E fill:#ffffff,stroke:#d32f2f,stroke-dasharray: 5 5
+    style F fill:#eeeeee,stroke:#424242
